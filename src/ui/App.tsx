@@ -30,9 +30,11 @@ export default function App() {
 
   const [echoWindow, setEchoWindow] = useState(DEFAULT_OPTIONS.echoWindow);
   const [densityWarn, setDensityWarn] = useState(DEFAULT_OPTIONS.densityWarn);
+  const [dragging, setDragging] = useState(false);
 
   const fileRef = useRef<HTMLInputElement>(null);
   const toastTimer = useRef<number>();
+  const dragDepth = useRef(0);
 
   const options = useMemo<Partial<AnalyzeOptions>>(
     () => ({ echoWindow, densityWarn }),
@@ -100,6 +102,23 @@ export default function App() {
     }
   };
 
+  const onDragEnter = (e: React.DragEvent) => {
+    if (!Array.from(e.dataTransfer.types).includes('Files')) return;
+    dragDepth.current += 1;
+    setDragging(true);
+  };
+  const onDragLeave = () => {
+    dragDepth.current = Math.max(0, dragDepth.current - 1);
+    if (dragDepth.current === 0) setDragging(false);
+  };
+  const onDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    dragDepth.current = 0;
+    setDragging(false);
+    const f = e.dataTransfer.files?.[0];
+    if (f) handleFile(f);
+  };
+
   const loadSample = () => {
     setText(SAMPLE_TEXT);
     setSourceName(SAMPLE_TITLE);
@@ -135,7 +154,22 @@ export default function App() {
   const hasText = text.trim().length > 0;
 
   return (
-    <div className="app">
+    <div
+      className="app"
+      onDragEnter={onDragEnter}
+      onDragOver={(e) => e.preventDefault()}
+      onDragLeave={onDragLeave}
+      onDrop={onDrop}
+    >
+      {dragging && (
+        <div className="drop-overlay">
+          <div className="drop-card">
+            <IconFile size={40} />
+            <strong>Drop to load your manuscript</strong>
+            <span>.txt, .md, or Word .docx — analyzed locally</span>
+          </div>
+        </div>
+      )}
       <header className="header">
         <div className="brand">
           <span className="logo"><IconLogo /></span>

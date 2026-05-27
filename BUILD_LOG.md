@@ -97,3 +97,21 @@ review findings. Newest entries at the bottom of each phase.
   publishing is staged behind `scripts/publish.sh`, which creates the repo,
   pushes, and cuts the release with the artifact attached given a single
   `GH_TOKEN`. Documented in the final report.
+
+## Round 2 — three-perspective review + edits (post user request)
+
+User created the repo `Skytuhua/Inkspect` and asked for three full reviews from
+different perspectives, then upload. See `review/REVIEW.md` "Round 2" for detail.
+
+- **Novelist/editor pass:** proper-noun detection (`src/engine/propernouns.ts`)
+  so names aren't flagged as echoes/overused; expanded `-ly` non-adverb
+  allowlist; tightened clichés. +3 engine tests.
+- **Engineer pass:** Web Worker `onerror` → synchronous fallback; memoised
+  editor highlight rendering.
+- **UX pass:** real drag-and-drop with a drop overlay (matches the empty-state
+  copy). +1 browser assertion + screenshot.
+- Re-verified: 58 unit tests + 11 browser assertions green, zero console errors;
+  rebuilt + re-checksummed the release artifact.
+- Re-probed GitHub write auth against the now-existing repo: read works
+  anonymously, but `git push --dry-run` still reports no usable credential, so
+  the upload remains gated on `GH_TOKEN` / `gh auth login`.

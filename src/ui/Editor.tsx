@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import type { Finding } from '../engine';
 import { IconFile, IconSparkle } from './icons';
 
@@ -65,25 +65,30 @@ export function Editor({ text, onChange, highlights, selectedStart, onOpenFile, 
   // Keep backdrop aligned if text/highlights change while scrolled.
   useLayoutEffect(syncScroll, [text, highlights]);
 
-  const ranges = toRanges(highlights, selectedStart);
-  const nodes: React.ReactNode[] = [];
-  let cursor = 0;
-  ranges.forEach((r, i) => {
-    if (r.start > cursor) nodes.push(text.slice(cursor, r.start));
-    nodes.push(
-      <mark
-        key={i}
-        className={r.selected ? 'sel' : undefined}
-        ref={r.selected ? (selRef as React.RefObject<HTMLElement>) : undefined}
-      >
-        {text.slice(r.start, r.end)}
-      </mark>,
-    );
-    cursor = r.end;
-  });
-  if (cursor < text.length) nodes.push(text.slice(cursor));
-  // Trailing newline so the backdrop's last line height matches the textarea.
-  nodes.push('\n');
+  // Rebuild highlight nodes only when text / highlights / selection change,
+  // not on every render (e.g. scroll sync), keeping typing snappy on long docs.
+  const nodes = useMemo(() => {
+    const ranges = toRanges(highlights, selectedStart);
+    const out: React.ReactNode[] = [];
+    let cursor = 0;
+    ranges.forEach((r, i) => {
+      if (r.start > cursor) out.push(text.slice(cursor, r.start));
+      out.push(
+        <mark
+          key={i}
+          className={r.selected ? 'sel' : undefined}
+          ref={r.selected ? (selRef as React.RefObject<HTMLElement>) : undefined}
+        >
+          {text.slice(r.start, r.end)}
+        </mark>,
+      );
+      cursor = r.end;
+    });
+    if (cursor < text.length) out.push(text.slice(cursor));
+    // Trailing newline so the backdrop's last line height matches the textarea.
+    out.push('\n');
+    return out;
+  }, [text, highlights, selectedStart]);
 
   const isEmpty = text.length === 0;
 

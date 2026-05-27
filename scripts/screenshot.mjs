@@ -99,8 +99,27 @@ const run = async () => {
   await page.waitForSelector('.empty-state');
   check('clear returns to empty state', await page.locator('.empty-state').isVisible());
 
-  // 8. Responsive / mobile.
+  // 7b. Drag-and-drop overlay (synthetic dragenter carrying a file).
   await page.locator('.empty-state .btn.primary').click();
+  await page.waitForFunction(() => {
+    const el = document.querySelector('.stat .v');
+    return el && parseInt(el.textContent.replace(/,/g, ''), 10) > 200;
+  }, { timeout: 8000 });
+  await page.evaluate(() => {
+    const dt = new DataTransfer();
+    dt.items.add(new File(['hello'], 'dropped.txt', { type: 'text/plain' }));
+    document.querySelector('.app').dispatchEvent(
+      new DragEvent('dragenter', { dataTransfer: dt, bubbles: true }),
+    );
+  });
+  await page.waitForSelector('.drop-overlay', { timeout: 3000 });
+  check('drag-and-drop overlay appears', await page.locator('.drop-overlay').isVisible());
+  await page.screenshot({ path: path.join(OUT, '08-drag-overlay-dark.png') });
+  await page.evaluate(() => {
+    document.querySelector('.app').dispatchEvent(new DragEvent('dragleave', { bubbles: true }));
+  });
+
+  // 8. Responsive / mobile (sample already loaded from step 7b).
   await page.waitForSelector('.report');
   await page.setViewportSize({ width: 460, height: 880 });
   await page.waitForTimeout(400);

@@ -3,6 +3,7 @@ import { DEFAULT_OPTIONS } from './types';
 import { tokenize } from './tokenize';
 import { segmentSentences, segmentParagraphs } from './segment';
 import { countSyllablesInText } from './syllables';
+import { detectProperNouns } from './propernouns';
 import { analyzeEchoes } from './analyzers/echoes';
 import { analyzePhrases } from './analyzers/phrases';
 import { analyzeCrutch } from './analyzers/crutch';
@@ -66,9 +67,10 @@ function computeStats(doc: Doc): DocStats {
 export function analyze(text: string, options: Partial<AnalyzeOptions> = {}): AnalysisResult {
   const opts: AnalyzeOptions = { ...DEFAULT_OPTIONS, ...options };
   const doc = buildDoc(text);
+  const proper = detectProperNouns(doc);
 
   const reports = [
-    analyzeEchoes(doc, opts),
+    analyzeEchoes(doc, opts, proper),
     analyzePhrases(doc, opts),
     analyzeCrutch(doc, opts),
     analyzeFilterWords(doc, opts),
@@ -77,7 +79,7 @@ export function analyze(text: string, options: Partial<AnalyzeOptions> = {}): An
     analyzeDialogueTags(doc),
     analyzeCliches(doc),
     analyzeRhythm(doc, opts),
-    analyzeOverused(doc),
+    analyzeOverused(doc, proper),
   ];
 
   return {

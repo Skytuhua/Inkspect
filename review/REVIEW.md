@@ -116,8 +116,56 @@ get free elsewhere — proximity echoes, crutch/filter words, said-bookisms,
 pacing — over their own `.docx`, privately, with click-to-locate highlights and
 an exportable report. It is fast, looks finished, and respects their draft.
 
-## Result
+## Result (round 1)
 
-A full review cycle produced **no remaining material findings**. All automated
-checks (55 unit tests + 10 browser assertions) pass; screenshots captured for
-every major state.
+A full review cycle produced no remaining material findings at that point. All
+automated checks passed; screenshots captured for every major state.
+
+---
+
+# Round 2 — three deliberate perspective passes (with edits)
+
+A second, deeper review from three distinct viewpoints. Each surfaced real
+issues that were **fixed and re-verified**, not just noted. Final state: **58
+unit tests + 11 browser assertions** all green; screenshots re-captured
+(`screenshots/08-drag-overlay-dark.png` added).
+
+## Perspective A — working novelist / editor (craft correctness)
+
+1. **Character names were being flagged as echoes/overused.** Repeating a name
+   like "Mara" is normal in fiction, so flagging it is a false positive that
+   would erode trust. **Fix:** added `src/engine/propernouns.ts`, which marks a
+   word as a proper noun when it is capitalised in ≥60% of its *mid-sentence*
+   occurrences, and excludes those words from the Echoes and Overused reports.
+   Verified by new tests and visibly in `02-sample-echoes-dark.png` ("Mara" is
+   no longer highlighted while "keeper", "saw", "very" still are).
+2. **`-ly` adjectives were mistaken for adverbs** ("scholarly", "cowardly",
+   "friendly", "elderly"…). **Fix:** greatly expanded the `NON_ADVERB_LY`
+   allowlist. New test asserts none of them are flagged.
+3. **Over-eager cliché fragments** ("butterflies in", "lump in", "eyes like")
+   risked false matches. **Fix:** replaced fragments with complete canonical
+   clichés and added a few common ones.
+
+## Perspective B — senior software engineer (robustness & performance)
+
+4. **No fallback if the Web Worker fails to load** (e.g. some `file://`
+   contexts) — analysis would silently hang. **Fix:** added `worker.onerror`
+   handling in `useAnalysis` that drops the worker and recomputes synchronously
+   from the latest inputs (kept in refs).
+5. **Editor rebuilt all highlight DOM on every render** (including scroll syncs).
+   **Fix:** memoised the highlight-node construction on `[text, highlights,
+   selectedStart]`, so typing on a long manuscript stays snappy.
+
+## Perspective C — UX / product designer (usability)
+
+6. **The empty state promised "Drop in your manuscript" but had no drag-and-drop.**
+   A broken affordance. **Fix:** implemented real drag-and-drop (with a drag-depth
+   counter to avoid flicker) and a polished full-screen drop overlay
+   (`08-drag-overlay-dark.png`). Verified by a synthetic file-drop assertion in
+   the browser script.
+
+## Result (round 2)
+
+All three passes' findings fixed and re-verified. `tsc`, `eslint --max-warnings 0`,
+58 unit tests, and the 11-assertion browser run are all green with zero console
+errors. The release artifact was rebuilt and re-checksummed.

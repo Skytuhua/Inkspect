@@ -70,15 +70,28 @@ export const TO_BE = new Set<string>([
   "there's", "what's", "who's",
 ]);
 
-/** Words ending in -ly that are NOT adverbs (so we don't flag them). */
+/** Words ending in -ly that are NOT adverbs (so we don't flag them). Includes
+ *  -ly nouns/verbs (reply, supply) and the large class of -ly *adjectives*
+ *  (friendly, scholarly, cowardly) that would otherwise be mistaken for adverbs. */
 export const NON_ADVERB_LY = new Set<string>([
+  // nouns / verbs ending in -ly
   'only', 'family', 'reply', 'rely', 'apply', 'supply', 'imply', 'comply',
-  'ally', 'rally', 'tally', 'belly', 'jelly', 'silly', 'bully', 'fully',
-  'jolly', 'holly', 'folly', 'lily', 'lovely', 'lonely', 'lively', 'likely',
-  'ugly', 'early', 'daily', 'holy', 'italy', 'ply', 'fly', 'sly', 'ghastly',
-  'friendly', 'deadly', 'orderly', 'elderly', 'cuddly', 'wobbly', 'bristly',
-  'curly', 'burly', 'gnarly', 'pearly', 'surly', 'homely', 'timely', 'costly',
-  'ghostly', 'monthly', 'weekly', 'yearly', 'nightly', 'worldly', 'measly',
+  'multiply', 'ally', 'rally', 'tally', 'belly', 'jelly', 'bully', 'lily',
+  'holly', 'folly', 'ply', 'fly', 'butterfly', 'dragonfly', 'anomaly',
+  'panoply', 'monopoly', 'assembly', 'italy', 'duly', 'wholly',
+  // adjectives ending in -ly (describe nouns, not verbs)
+  'silly', 'fully', 'jolly', 'lovely', 'lonely', 'lively', 'likely', 'ugly',
+  'early', 'daily', 'holy', 'ghastly', 'friendly', 'deadly', 'orderly',
+  'elderly', 'cuddly', 'wobbly', 'bristly', 'curly', 'burly', 'gnarly',
+  'pearly', 'surly', 'homely', 'timely', 'costly', 'ghostly', 'monthly',
+  'weekly', 'yearly', 'nightly', 'worldly', 'measly', 'beastly', 'kingly',
+  'queenly', 'saintly', 'scholarly', 'cowardly', 'brotherly', 'sisterly',
+  'motherly', 'fatherly', 'heavenly', 'leisurely', 'unruly', 'grisly',
+  'comely', 'seemly', 'unseemly', 'portly', 'stately', 'courtly', 'princely',
+  'womanly', 'manly', 'godly', 'lowly', 'oily', 'wily', 'chilly', 'frilly',
+  'prickly', 'crinkly', 'sprightly', 'unsightly', 'knightly', 'earthly',
+  'miserly', 'sickly', 'kindly', 'goodly', 'shapely', 'lordly', 'beggarly',
+  'scaly', 'steely', 'smelly', 'woolly',
 ]);
 
 /** Dialogue tag verbs that are unobtrusive and generally fine. */
@@ -125,7 +138,10 @@ export const CLICHES: string[] = [
   'to make a long story short', 'tongue in cheek', 'too good to be true',
   'under the weather', 'water under the bridge', 'weather the storm',
   'white as a sheet', 'whole nine yards', 'wolf in sheep\'s clothing',
-  'a heart of stone', 'pale as a ghost', 'time flies', 'tears streamed down',
-  'her heart pounded', 'his blood ran cold', 'a shiver ran down',
-  'butterflies in', 'lump in', 'eyes like', 'lost track of time',
+  'a heart of stone', 'pale as a ghost', 'time flies when',
+  'tears streamed down', 'his blood ran cold', 'her blood ran cold',
+  'a shiver ran down', 'butterflies in her stomach', 'butterflies in his stomach',
+  'butterflies in my stomach', 'lost track of time', 'heart in her throat',
+  'heart in his throat', 'a sinking feeling', 'against all odds',
+  'in the blink of an eye', 'when all is said and done', 'last straw',
 ];

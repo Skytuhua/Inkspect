@@ -32,6 +32,13 @@ describe('echoes', () => {
     expect(r.findings.length).toBe(0);
   });
 
+  it('does not flag a repeated character name as an echo', () => {
+    const text =
+      'When Mara turned the corner, Mara saw the light. Then Mara ran toward home.';
+    const r = report(text, 'echoes', { echoWindow: 50 });
+    expect(r.findings.some((f) => f.group === 'mara')).toBe(false);
+  });
+
   it('carries offsets that map to the source word', () => {
     const text = 'Smoke filled the smoke-filled room with smoke.';
     const r = report(text, 'echoes', { echoWindow: 20 });
@@ -89,6 +96,20 @@ describe('adverbs', () => {
   it('specially marks adverbs on dialogue tags', () => {
     const r = report('"Go," he said quietly.', 'adverbs');
     expect(r.findings.some((f) => f.group === '-ly + tag')).toBe(true);
+  });
+
+  it('does not flag -ly adjectives as adverbs', () => {
+    const r = report('The scholarly, cowardly, friendly elderly man looked lovely.', 'adverbs');
+    expect(r.findings.length).toBe(0);
+  });
+});
+
+describe('overused words', () => {
+  it('excludes proper nouns (names) from the frequency report', () => {
+    const text =
+      'When Mara turned the corner, Mara saw the door. Then Mara opened it slowly.';
+    const r = report(text, 'overused');
+    expect(r.rows?.some((row) => row.label.includes('mara'))).toBe(false);
   });
 });
 

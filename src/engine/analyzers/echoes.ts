@@ -13,15 +13,16 @@ interface Cluster {
   positions: number[]; // indices into doc.words
 }
 
-export function analyzeEchoes(doc: Doc, opts: AnalyzeOptions): Report {
+export function analyzeEchoes(doc: Doc, opts: AnalyzeOptions, proper?: Set<string>): Report {
   const { words } = doc;
   const window = opts.echoWindow;
   const minCount = opts.echoMinCount;
 
-  // Pre-compute stems, skipping stopwords and very short words.
+  // Pre-compute stems, skipping stopwords, proper nouns, and very short words.
   const stems: (string | null)[] = words.map((w) => {
     if (w.lower.length < 3) return null;
     if (STOPWORDS.has(w.lower)) return null;
+    if (proper && proper.has(w.lower)) return null; // names repeat legitimately
     if (!/[a-z]/i.test(w.lower)) return null; // skip pure numbers
     return stem(w.lower);
   });

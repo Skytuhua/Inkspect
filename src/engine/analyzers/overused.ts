@@ -6,13 +6,14 @@ import { STOPWORDS } from '../wordlists';
 // by stem so "walk/walks/walked/walking" count together. Stems whose frequency
 // is unusually high relative to document length are flagged and highlightable.
 
-export function analyzeOverused(doc: Doc): Report {
+export function analyzeOverused(doc: Doc, proper?: Set<string>): Report {
   const positions = new Map<string, number[]>();
   const forms = new Map<string, Set<string>>();
 
   doc.words.forEach((w, i) => {
     if (w.lower.length < 4) return;
     if (STOPWORDS.has(w.lower)) return;
+    if (proper && proper.has(w.lower)) return; // exclude character/place names
     if (!/[a-z]/i.test(w.lower)) return;
     const s = stem(w.lower);
     if (s.length < 3) return;

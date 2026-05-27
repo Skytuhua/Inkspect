@@ -32,7 +32,7 @@ Inkspect fills that gap: the fiction-specific reports, free, and **fully local**
 
 | Report | What it finds |
 |---|---|
-| **Echoes** | The same word *root* repeated within a short window (e.g. `walked`…`walking`) — close repetition readers notice. Stemmed, stopword-aware, adjustable window. |
+| **Echoes** | The same word *root* repeated within a short window (e.g. `walked`…`walking`) — close repetition readers notice. Stemmed, stopword-aware, **proper-noun-aware** (won't flag character names), adjustable window. |
 | **Repeated phrases** | Exact 3–5 word phrases reused across the manuscript. |
 | **Crutch & filler words** | `just`, `really`, `very`, `suddenly`, `kind of`… with counts and density per 1,000 words. |
 | **Filter words** | `saw`, `heard`, `felt`, `knew`, `realized`, `noticed`… that distance the reader. |
@@ -80,8 +80,9 @@ npx serve inkspect-1.0.0-web      # or: python3 -m http.server
 
 ## Usage
 
-- **Bring text in:** paste into the editor, click **Open file** (`.txt`, `.md`,
-  `.docx`), or **Sample** to load the demo manuscript.
+- **Bring text in:** paste into the editor, **drag-and-drop** a file onto the
+  window, click **Open file** (`.txt`, `.md`, `.docx`), or **Sample** to load the
+  demo manuscript.
 - **Read the dashboard:** word/sentence stats, readability, the sentence-rhythm
   chart, and the polish score update automatically.
 - **Investigate a report:** click it to expand. Its hits are highlighted in the
