@@ -53,7 +53,7 @@ const run = async () => {
   const wordCount = await page.locator('.stat .v').first().innerText();
   check('word count populated', parseInt(wordCount.replace(/,/g, ''), 10) > 200);
   const reportCount = await page.locator('.report').count();
-  check('all 10 reports rendered', reportCount === 10);
+  check('all 11 reports rendered', reportCount === 11);
   await page.waitForSelector('.editor-backdrop mark');
   const marks = await page.locator('.editor-backdrop mark').count();
   check('echoes highlighted in text', marks > 0);
@@ -69,10 +69,28 @@ const run = async () => {
   check('selected finding is emphasised', selMarks === 1);
   await page.screenshot({ path: path.join(OUT, '03-crutch-report-dark.png') });
 
+  // 3b. Clickable breakdown row → focus a single word in the text.
+  const allCrutchMarks = await page.locator('.editor-backdrop mark').count();
+  await page.locator('.row-item.clickable').first().click();
+  await page.waitForSelector('.row-item.active');
+  await page.waitForTimeout(300);
+  const focusedMarks = await page.locator('.editor-backdrop mark').count();
+  check('focusing a row narrows the highlights', focusedMarks > 0 && focusedMarks < allCrutchMarks);
+  check('focus-clear chip appears', await page.locator('.focus-clear').isVisible());
+  await page.screenshot({ path: path.join(OUT, '10-row-focus-dark.png') });
+  await page.locator('.focus-clear').click(); // clear focus
+  await page.waitForTimeout(200);
+
   // 4. Dialogue tags report (shows said-bookisms).
   await reportHead('Dialogue tags').click();
   await page.waitForTimeout(300);
   await page.screenshot({ path: path.join(OUT, '04-dialogue-tags-dark.png') });
+
+  // 4c. Sentence openers (new report).
+  await reportHead('Sentence openers').click();
+  await page.waitForTimeout(300);
+  check('openers report present', await reportHead('Sentence openers').isVisible());
+  await page.screenshot({ path: path.join(OUT, '11-openers-dark.png') });
 
   // 5. Light theme.
   await page.locator('.icon-btn[aria-label="Toggle colour theme"]').click();

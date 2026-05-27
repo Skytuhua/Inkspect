@@ -28,7 +28,7 @@ export function analyzeDialogueTags(doc: Doc): Report {
   }
 
   const rows: ReportRow[] = [...bookismCounts.entries()]
-    .map(([label, count]) => ({ label, count }))
+    .map(([label, count]) => ({ label, count, match: label }))
     .sort((a, b) => b.count - a.count);
 
   const ratio = neutral + bookisms > 0 ? bookisms / (neutral + bookisms) : 0;

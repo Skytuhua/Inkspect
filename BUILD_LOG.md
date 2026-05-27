@@ -115,3 +115,16 @@ different perspectives, then upload. See `review/REVIEW.md` "Round 2" for detail
 - Re-probed GitHub write auth against the now-existing repo: read works
   anonymously, but `git push --dry-run` still reports no usable credential, so
   the upload remains gated on `GH_TOKEN` / `gh auth login`.
+
+## Round 3 — post-launch features (v1.1.0)
+
+Shipped v1.0.0 to GitHub (main, release with artifact) and a live GitHub Pages
+demo at https://skytuhua.github.io/Inkspect/ (verified working in a real
+browser, Web Worker loads under the subpath). Then, per user request, a third
+review added features a writer would want next:
+- New **Sentence Openers** analyzer (11th report) + 3 tests.
+- **Dialogue ratio** stat in the dashboard + test.
+- **Clickable breakdown rows** to focus a single word's highlights (engine
+  `match` keys + UI focus state) + 2 browser assertions.
+62 unit tests + 14 browser assertions green. Bumped to v1.1.0; rebuilt artifact;
+re-pushed, re-tagged, re-released, redeployed Pages.

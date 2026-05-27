@@ -104,6 +104,24 @@ describe('adverbs', () => {
   });
 });
 
+describe('sentence openers', () => {
+  it('flags a run of sentences starting with the same word', () => {
+    const r = report('She walked home. She opened the door. She sat down. The end came.', 'openers');
+    expect(r.findings.length).toBeGreaterThanOrEqual(3);
+    expect(r.findings.every((f) => f.group === 'she')).toBe(true);
+  });
+
+  it('reports opener frequencies with match keys', () => {
+    const r = report('The cat ran. The dog slept. A bird sang.', 'openers');
+    expect(r.rows?.some((row) => row.label === 'the' && row.match === 'the')).toBe(true);
+  });
+
+  it('does not flag varied openings', () => {
+    const r = report('Rain fell. She paused. Then everything changed. Birds scattered.', 'openers');
+    expect(r.findings.length).toBe(0);
+  });
+});
+
 describe('overused words', () => {
   it('excludes proper nouns (names) from the frequency report', () => {
     const text =

@@ -40,7 +40,7 @@ export function markWordSet(
     };
   });
   const rows: ReportRow[] = [...counts.entries()]
-    .map(([label, count]) => ({ label, count, density: density(count, doc.words.length) }))
+    .map(([label, count]) => ({ label, count, density: density(count, doc.words.length), match: label }))
     .sort((a, b) => b.count - a.count);
   return { findings, rows, total: positions.length };
 }

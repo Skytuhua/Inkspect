@@ -27,6 +27,7 @@ export default function App() {
   const [toast, setToast] = useState<Toast>(null);
   const [openReportId, setOpenReportId] = useState<string | null>(null);
   const [findingIndex, setFindingIndex] = useState(0);
+  const [focus, setFocus] = useState<string | null>(null);
 
   const [echoWindow, setEchoWindow] = useState(DEFAULT_OPTIONS.echoWindow);
   const [densityWarn, setDensityWarn] = useState(DEFAULT_OPTIONS.densityWarn);
@@ -62,13 +63,22 @@ export default function App() {
     () => result?.reports.find((r) => r.id === openReportId) ?? null,
     [result, openReportId],
   );
-  const highlights = openReport?.findings ?? [];
+  // When a breakdown row is focused, restrict highlights/navigation to that word.
+  const activeFindings = useMemo(() => {
+    const all = openReport?.findings ?? [];
+    if (!focus) return all;
+    return all.filter(
+      (f) => f.group === focus || text.slice(f.start, f.end).toLowerCase() === focus,
+    );
+  }, [openReport, focus, text]);
+  const highlights = activeFindings;
   const selectedStart =
-    openReport && highlights.length > 0
-      ? highlights[Math.min(findingIndex, highlights.length - 1)]?.start ?? null
+    activeFindings.length > 0
+      ? activeFindings[Math.min(findingIndex, activeFindings.length - 1)]?.start ?? null
       : null;
 
   const handleToggleReport = (id: string) => {
+    setFocus(null);
     if (id === openReportId) {
       setOpenReportId(null);
     } else {
@@ -78,9 +88,14 @@ export default function App() {
   };
 
   const handleStep = (delta: number) => {
-    const n = highlights.length;
+    const n = activeFindings.length;
     if (n === 0) return;
     setFindingIndex((i) => (i + delta + n) % n);
+  };
+
+  const handleFocusRow = (match: string) => {
+    setFocus((cur) => (cur === match ? null : match));
+    setFindingIndex(0);
   };
 
   const handleOpenFile = () => fileRef.current?.click();
@@ -124,12 +139,14 @@ export default function App() {
     setSourceName(SAMPLE_TITLE);
     setOpenReportId('echoes');
     setFindingIndex(0);
+    setFocus(null);
   };
 
   const clearAll = () => {
     setText('');
     setSourceName('manuscript');
     setOpenReportId(null);
+    setFocus(null);
   };
 
   const copyText = async () => {
@@ -257,8 +274,11 @@ export default function App() {
                   reports={result.reports}
                   openId={openReportId}
                   findingIndex={findingIndex}
+                  activeFindings={activeFindings}
+                  focus={focus}
                   onToggle={handleToggleReport}
                   onStep={handleStep}
+                  onFocusRow={handleFocusRow}
                 />
               )}
             </>

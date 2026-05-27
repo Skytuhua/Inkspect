@@ -68,6 +68,9 @@ export interface ReportRow {
   count: number;
   /** Optional per-1000-words density. */
   density?: number;
+  /** Optional key used to focus this row's occurrences in the text (matches a
+   *  finding's `group`, or the highlighted source text). */
+  match?: string;
 }
 
 export interface DocStats {
@@ -86,6 +89,8 @@ export interface DocStats {
   fleschKincaidGrade: number;
   /** Estimated reading time in minutes at 250 wpm. */
   readingTimeMin: number;
+  /** Fraction (0–1) of words that fall inside quotation marks (dialogue). */
+  dialogueRatio: number;
 }
 
 export interface AnalysisResult {

@@ -35,7 +35,7 @@ export function analyzeCliches(doc: Doc): Report {
 
   findings.sort((a, b) => a.start - b.start);
   const rowList: ReportRow[] = [...rows.entries()]
-    .map(([label, count]) => ({ label, count }))
+    .map(([label, count]) => ({ label, count, match: label }))
     .sort((a, b) => b.count - a.count);
   const total = findings.length;
 

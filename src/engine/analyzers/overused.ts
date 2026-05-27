@@ -35,7 +35,7 @@ export function analyzeOverused(doc: Doc, proper?: Set<string>): Report {
   for (const [s, idxs] of positions) {
     const formSet = forms.get(s)!;
     const display = formSet.size === 1 ? [...formSet][0] : `${s}* (${[...formSet].slice(0, 3).join(', ')}${formSet.size > 3 ? '…' : ''})`;
-    rows.push({ label: display, count: idxs.length, density: (idxs.length / contentWords) * 1000 });
+    rows.push({ label: display, count: idxs.length, density: (idxs.length / contentWords) * 1000, match: s });
     if (idxs.length >= threshold) {
       for (const i of idxs) {
         const w = doc.words[i];

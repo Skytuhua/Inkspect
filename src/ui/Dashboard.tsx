@@ -93,6 +93,11 @@ export function Dashboard({ result }: { result: AnalysisResult | null }) {
             <div className="k">Grade level</div>
             <div className="grade">{s ? `≈ US grade ${Math.round(s.fleschKincaidGrade)}` : ''}</div>
           </div>
+          <div className="read-card">
+            <div className="v">{s ? `${Math.round(s.dialogueRatio * 100)}%` : '0%'}</div>
+            <div className="k">Dialogue</div>
+            <div className="grade">{s ? `${100 - Math.round(s.dialogueRatio * 100)}% narrative` : ''}</div>
+          </div>
         </div>
       </div>
       <div className="section">

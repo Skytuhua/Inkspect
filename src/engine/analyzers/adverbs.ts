@@ -50,7 +50,7 @@ export function analyzeAdverbs(doc: Doc, opts: AnalyzeOptions): Report {
   const total = findings.length;
   const d = density(total, doc.words.length);
   const rows: ReportRow[] = [...counts.entries()]
-    .map(([label, count]) => ({ label, count, density: density(count, doc.words.length) }))
+    .map(([label, count]) => ({ label, count, density: density(count, doc.words.length), match: label }))
     .sort((a, b) => b.count - a.count)
     .slice(0, 50);
 

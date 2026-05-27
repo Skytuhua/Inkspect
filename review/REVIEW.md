@@ -169,3 +169,32 @@ unit tests + 11 browser assertions** all green; screenshots re-captured
 All three passes' findings fixed and re-verified. `tsc`, `eslint --max-warnings 0`,
 58 unit tests, and the 11-assertion browser run are all green with zero console
 errors. The release artifact was rebuilt and re-checksummed.
+
+---
+
+# Round 3 — post-launch review + new features (v1.1.0)
+
+After v1.0.0 shipped to GitHub + Pages, a further review focused on "what would
+this user reach for next." Three features were added and verified.
+
+1. **Sentence Openers report** — flags runs of consecutive sentences beginning
+   with the same word and reports opener frequencies. A classic fiction
+   self-editing check that was missing. Visible in `11-openers-dark.png`
+   (the sample's "She… She… She…" and "Outside… Outside…" runs are caught).
+   Covered by 3 new unit tests.
+2. **Dialogue ratio** — % of words inside quotation marks, shown in the
+   dashboard; useful for gauging dialogue-vs-narrative balance. Unit-tested.
+3. **Clickable word breakdowns** — every report's breakdown row is now a button;
+   clicking it highlights only that word/phrase in the manuscript and gives it
+   its own prev/next navigation, with a focus chip to clear. Big usability win
+   for acting on a specific overused word. Visible in `10-row-focus-dark.png`
+   (clicking "very" isolates its 7 occurrences). Verified by 2 browser
+   assertions.
+
+Also: README updated with the live-demo link and real repo URLs.
+
+## Result (round 3)
+
+`tsc`, `eslint --max-warnings 0`, **62 unit tests**, and a **14-assertion**
+browser run all green, zero console errors. Rebuilt + re-checksummed the
+artifact and re-verified the live deployment.

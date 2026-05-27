@@ -33,9 +33,16 @@ describe('analyze — stats and robustness', () => {
     expect(ids).toEqual(
       [
         'adverbs', 'cliches', 'crutch', 'dialogue-tags', 'echoes',
-        'filter', 'overused', 'phrases', 'rhythm', 'weak-verbs',
+        'filter', 'openers', 'overused', 'phrases', 'rhythm', 'weak-verbs',
       ].sort(),
     );
+  });
+
+  it('computes a dialogue ratio from quoted text', () => {
+    const narrationOnly = analyze('The room was cold and silent and empty.');
+    expect(narrationOnly.stats.dialogueRatio).toBe(0);
+    const withDialogue = analyze('"Hello there, my old friend," she said.');
+    expect(withDialogue.stats.dialogueRatio).toBeGreaterThan(0.4);
   });
 
   it('is deterministic', () => {

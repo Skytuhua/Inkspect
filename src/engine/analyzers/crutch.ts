@@ -28,7 +28,7 @@ export function analyzeCrutch(doc: Doc, opts: AnalyzeOptions): Report {
     }
     if (positions.length > 0) {
       const text = phrase.join(' ');
-      mwRows.push({ label: text, count: positions.length, density: density(positions.length, doc.words.length) });
+      mwRows.push({ label: text, count: positions.length, density: density(positions.length, doc.words.length), match: text });
       for (const i of positions) {
         findings.push({
           start: doc.words[i].start,

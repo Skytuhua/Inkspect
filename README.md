@@ -6,8 +6,11 @@
 
 Find the prose problems free tools ignore — **echoes**, **crutch & filler words**,
 reader-distancing **filter words**, **adverb** and **weak-verb** overuse,
-**clichés**, **said-bookisms**, and **sentence-rhythm** flatlines — all computed
-**100% in your browser**. Your unpublished draft never touches a server.
+**clichés**, **said-bookisms**, repetitive **sentence openers**, and
+**sentence-rhythm** flatlines — all computed **100% in your browser**. Your
+unpublished draft never touches a server.
+
+**[▶ Try the live demo](https://skytuhua.github.io/Inkspect/)** &nbsp;·&nbsp; no install, nothing uploaded
 
 </div>
 
@@ -41,12 +44,16 @@ Inkspect fills that gap: the fiction-specific reports, free, and **fully local**
 | **Dialogue tags** | Plain `said`/`asked` vs. ornate "said-bookisms" (`exclaimed`, `hissed`, `retorted`). |
 | **Clichés** | A curated dictionary of worn-out stock phrases. |
 | **Sentence rhythm** | Per-sentence length chart + flags for monotonous runs that flatten pacing. |
-| **Overused words** | Document-wide frequency, grouped by root. |
+| **Sentence openers** | Flags runs of sentences that start with the same word ("She… She… She…") and shows opener frequencies. |
+| **Overused words** | Document-wide frequency, grouped by root (name-aware). |
 | **Readability** | Flesch Reading Ease, Flesch–Kincaid grade, word/sentence/paragraph/syllable stats, reading time, and an at-a-glance polish score. |
 
-Plus: click any finding to **scroll to and highlight** it in the text; the editor
-is **live** (edit and re-analyze); **light/dark** themes; **`.txt` / `.md` / Word
-`.docx`** import; and a one-click **Markdown report export**.
+Plus: a **readability dashboard** with a **dialogue-vs-narrative ratio** and a
+polish score; **click any word** in a report's breakdown to highlight just its
+occurrences and step through them; click any finding to **scroll to and
+highlight** it; the editor is **live** (edit and re-analyze); **drag-and-drop**
+and **`.txt` / `.md` / Word `.docx`** import; **light/dark** themes; and a
+one-click **Markdown report export**.
 
 ## Privacy
 
@@ -59,8 +66,8 @@ your browser's Network tab — it stays empty.
 ## Quick start
 
 ```bash
-git clone https://github.com/<your-username>/inkspect.git
-cd inkspect
+git clone https://github.com/Skytuhua/Inkspect.git
+cd Inkspect
 npm install
 npm run dev          # http://localhost:5173
 ```
@@ -72,7 +79,7 @@ npm run dev          # http://localhost:5173
    directly via `file://` won't work because browsers block module workers there):
 
 ```bash
-npx serve inkspect-1.0.0-web      # or: python3 -m http.server
+npx serve inkspect-1.1.0-web      # or: python3 -m http.server
 ```
 
 3. Open the printed URL. Click **Load sample manuscript** to see it in action, or

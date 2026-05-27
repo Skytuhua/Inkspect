@@ -4,6 +4,26 @@ All notable changes to Inkspect are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.1.0] — 2026-05-27
+
+A second review round added new fiction-focused capabilities and polish.
+
+### Added
+
+- **Sentence Openers report:** flags runs of consecutive sentences that begin
+  with the same word (the classic "She… She… She…" problem) and shows opener
+  frequencies — a common fiction self-editing check.
+- **Dialogue ratio:** the dashboard now shows the percentage of words inside
+  quotation marks vs. narrative.
+- **Clickable word breakdowns:** click any word/phrase in a report's breakdown
+  to highlight just that item in the manuscript and step through its
+  occurrences, with a focus chip to clear it.
+
+### Tests
+
+- 62 unit tests (added coverage for sentence openers and the dialogue ratio)
+  and a 14-assertion browser verification run.
+
 ## [1.0.0] — 2026-05-27
 
 First public release.

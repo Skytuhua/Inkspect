@@ -14,6 +14,7 @@ import { analyzeCliches } from './analyzers/cliches';
 import { analyzeDialogueTags } from './analyzers/dialogueTags';
 import { analyzeRhythm } from './analyzers/rhythm';
 import { analyzeOverused } from './analyzers/overused';
+import { analyzeOpeners } from './analyzers/openers';
 
 export * from './types';
 
@@ -28,6 +29,25 @@ export function buildDoc(text: string): Doc {
 function round(n: number, dp = 1): number {
   const f = Math.pow(10, dp);
   return Math.round(n * f) / f;
+}
+
+// Fraction of words that sit inside quotation marks (straight or curly).
+// A light scanner toggles an "in quote" flag; words starting inside it count.
+function dialogueRatio(doc: Doc): number {
+  if (doc.words.length === 0) return 0;
+  const text = doc.text;
+  const inQuote: boolean[] = new Array(text.length);
+  let open = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (c === '“') open = true;
+    else if (c === '”') open = false;
+    else if (c === '"') open = !open;
+    inQuote[i] = open;
+  }
+  let n = 0;
+  for (const w of doc.words) if (inQuote[w.start]) n++;
+  return round(n / doc.words.length, 3);
 }
 
 function computeStats(doc: Doc): DocStats {
@@ -60,6 +80,7 @@ function computeStats(doc: Doc): DocStats {
     fleschReadingEase: round(Math.max(0, Math.min(120, flesch))),
     fleschKincaidGrade: round(Math.max(0, fk)),
     readingTimeMin: round(words / 250),
+    dialogueRatio: dialogueRatio(doc),
   };
 }
 
@@ -79,6 +100,7 @@ export function analyze(text: string, options: Partial<AnalyzeOptions> = {}): An
     analyzeDialogueTags(doc),
     analyzeCliches(doc),
     analyzeRhythm(doc, opts),
+    analyzeOpeners(doc),
     analyzeOverused(doc, proper),
   ];
 
